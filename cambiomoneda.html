@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        div p {
+            margin: 20px 0px;
+           
+        }
+
+        div{
+            width: 285px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 5px ridge gray
+        }
+        div label{
+            font-size: 1.5rem;
+            text-align: center;
+            background-color: dodgerblue;
+            display: block;
+            margin-bottom: 10px;
+        }
+    </style>
+    <script>
+        //variables globales . Existen en todo el documento.
+        var VDE = 0.719; var VDL = 0.596; var VED = 1 / VDE;
+        var VLD = 1 / VDL; var VEL = VDL / VDE; var VLE = 1 / VEL;
+
+        //***********************************//
+
+        function recalcula(){
+            VED=1 / VDE;
+            VLD= 1/ VDL;
+            VEL =VDL /VDE;
+            VLE= 1/ VEL;
+        }
+
+         /****************************************/
+         function inicio(){
+             wde.value=VDE;
+             wdl.value=VDL;
+
+         }
+
+        //*document.write(Math.round(100.45)+"<br>");
+        //*document.write(Math.round(5.51)+"<br>")
+
+        function redondeo(numero, decimales) {
+            var po = Math.pow(10, decimales); 
+            return Math.round(numero * po) / po;    
+        }
+        /****************************************/
+
+        function bcambio(origen){
+            var str=origen.id;
+            if (str.indexOf('dolares')>-1) {
+                dolares.value= parseFloat(dolares.value)+parseInt(origen.innerHTML);
+                cambio(document.getElementById ('dolares'));
+            } else if (str.indexOf('euros')>-1) {
+                euros.value=parseFloat(euros.value)+parseInt(origen.innerHTML);
+                cambio(document.getElementById ('euros'));
+            } else if (str.indexOf('libras')>-1) {
+                libras.value=parseFloat(libras.value)+parseInt(origen.innerHTML);
+                cambio(document.getElementById ('libras'));
+            }
+        }
+        /**************************************************/
+        function scambio(origen){
+            var str=origen.id;
+            var n;
+
+            if (str.indexOf('_s')>-1) {
+                n=parseInt(origen.value);
+            }else{
+                n=parseInt(origen.innerHTML);
+            }
+
+            if (str.indexOf('dolares')>-1) {
+                dolares.value= parseFloat(dolares.value)+n;
+                cambio(document.getElementById ('dolares'));
+            } else if (str.indexOf('euros')>-1) {
+                euros.value=parseFloat(euros.value)+n;
+                cambio(document.getElementById ('euros'));
+            } else if (str.indexOf('libras')>-1) {
+                libras.value=parseFloat(libras.value)+n;
+                cambio(document.getElementById ('libras'));
+            }
+        }
+        
+        /******************************************/
+        function cambio(origen) {
+            //* alert(origen.id + " " + origen.value);//*
+            var monedas = origen.value;
+            switch (origen.id) {
+                case 'dolares':
+                    euros.value = redondeo(monedas * VDE, 6);
+                    libras.value = redondeo(monedas * VDL, 6);
+                    break;
+                case 'euros':
+                    libras.value = redondeo(monedas * VEL, 6);
+                    dolares.value = redondeo(monedas * VED, 6);
+                    break;
+                case 'libras':
+                    euros.value = redondeo(monedas * VLE, 6);
+                    dolares.value = redondeo(monedas * VLD, 6);
+                    break;
+            }
+        }
+    </script>
+</head>
+
+<body onload="inicio()">
+        <div>
+<p> 
+<label for="wde">1Dolar--->X Euros</label>
+<input onchange="VDE=this.value" type="text" name="wde" id="wde">
+</p>
+<p> 
+<label for="wdl">1Dolar--->X Libras</label>
+<input onchange="VDL=this.value" type="text" name="wdl" id="wdl">
+</p>
+</div>
+        <div>
+        <p> 
+        <label for="dolares">Dolares</label>
+        <input onchange="cambio(this)" type="text" name="dolares" id="dolares" value="0">
+        <button id="dolares_mas1" onclick="bcambio(this)">+1</button>
+        <button id="dolares_menos1" onclick="bcambio(this)">-1</button>
+
+        <select onchange="scambio(this)"name="dolares_s" id="dolares_s">
+            <option value="-4">-4</option>
+            <option value="-2">-2</option>
+            <option selected value="0">0</option>
+            <option value="2">2</option>
+            <option value="4">4</option>
+        </select> </p>
+        <p> 
+        <label for="euros">Euros</label>
+        <input onchange="cambio(this)" type="text" name="euros" id="euros">
+        <button id="euros_mas1" onclick="bcambio(this)">+1</button>
+        <button id="euros_menos1" onclick="bcambio(this)">-1</button>
+
+<select onchange="scambio(this)"name="euros_s" id="euros_s">
+            <option value="-4">-4</option>
+            <option value="-2">-2</option>
+            <option selected value="0">0</option>
+            <option value="2">2</option>
+            <option value="4">4</option>
+        </select></p>
+        <p> 
+        <label for="libras">Libras</label>
+        <input onchange="cambio(this)" type="text" name="libras" id="libras">
+        <button id="libras_mas1" onclick="bcambio(this)">+1</button>
+        <button id="libras_menos1" onclick="bcambio(this)">-1</button>
+<select onchange="scambio(this)"name="libras_s" id="libras_s">
+            <option value="-4">-4</option>
+            <option value="-2">-2</option>
+            <option selected value="0">0</option>
+            <option value="2">2</option>
+            <option value="4">4</option>
+        </p>
+        </select> </div>
+
+</body>
+
+</html>
